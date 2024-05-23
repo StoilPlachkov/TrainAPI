@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Data
+namespace ApplicationServices.DTOs
 {
-    public class BaseEntity
+    public class BaseDTO
     {
-        [Key]
         public int Id { get; set; }
     }
 }
