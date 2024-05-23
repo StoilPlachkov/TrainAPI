@@ -11,10 +11,12 @@ using System.Threading.Tasks;
 
 namespace ApplicationServices.implementations
 {
-    internal class TrainManagementService : ITrainManagmentService
+    public class TrainManagementService : ITrainManagmentService
     {
         public readonly TrainsDbContext _context;
-        public TrainManagementService(TrainsDbContext context) { _context = context; }
+        public TrainManagementService(TrainsDbContext context) {
+            _context = context; 
+        }
         public async Task DeleteTrain(int id)
         {
             var trains = await _context.Trains.ToListAsync();
@@ -50,7 +52,7 @@ namespace ApplicationServices.implementations
             return trainsDTOs;
         }
 
-        public async Task<TrainDTO> GetTrain(int id)
+        public async Task<TrainDTO?> GetTrain(int id)
         {
             var trains = await _context.Trains.ToListAsync();
 
