@@ -12,7 +12,7 @@ using Data.context;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TrainsController : ControllerBase
     {

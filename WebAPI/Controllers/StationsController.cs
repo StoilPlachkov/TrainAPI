@@ -8,7 +8,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class StationsController : ControllerBase
     {
