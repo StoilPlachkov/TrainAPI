@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebClient.Models.TrainViewModel>
+﻿@model IEnumerable<WebClient.Models.StationViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,7 +9,6 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
 <form asp-action="Index" method="get">
     <div class="form-action no-color">
         <p>
@@ -29,16 +28,10 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]">@Html.DisplayNameFor(model => model.Type)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PlatformSortParm"]">@Html.DisplayNameFor(model => model.PlatformCount)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CapacitySortParm"]">@Html.DisplayNameFor(model => model.Capacity)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.ManufactureDate)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["SpeedSortParm"]">@Html.DisplayNameFor(model => model.MaxSpeed)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["OperationalSortParm"]">@Html.DisplayNameFor(model => model.IsOperational)</a>
             </th>
             <th></th>
         </tr>
@@ -54,16 +47,10 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Type)
+                    @Html.DisplayFor(modelItem => item.PlatformCount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Capacity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ManufactureDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaxSpeed)
+                    @Html.DisplayFor(modelItem => item.IsOperational)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

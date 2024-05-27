@@ -1,5 +1,6 @@
 
 using Data.context;
+using WebAPI.Authentication;
 
 namespace WebAPI
 {
@@ -26,6 +27,8 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ApiKeyAuthMiddleware>();
 
             app.UseAuthorization();
 

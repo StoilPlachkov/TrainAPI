@@ -6,75 +6,67 @@ using WebClient.Models;
 
 namespace WebClient.Controllers
 {
-    public class TrainController : Controller
+    public class StationController : Controller
     {
         private readonly string _apiKey = "?x-api-key=069D25CA8A5241688DBB7DA09FE68D75";
         Uri baseAddress = new Uri("https://localhost:7224/api");
         [HttpGet]
         public IActionResult Index(string sortOrder, string searchString)
         {
-            List<TrainViewModel> trainLits = new List<TrainViewModel>();
+            List<StationViewModel> stationList = new List<StationViewModel>();
             //Request
             using (var http = new HttpClient())
             {
-                var response = http.GetAsync(baseAddress + "/Trains/GetTrains" + _apiKey).Result;
+                var response = http.GetAsync(baseAddress + "/Stations/GetStations" + _apiKey).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var body = response.Content.ReadAsStringAsync().Result;
-                    trainLits = JsonConvert.DeserializeObject<List<TrainViewModel>>(body);
+                    stationList = JsonConvert.DeserializeObject<List<StationViewModel>>(body);
                 }
 
                 ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name" : "";
-                ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date" : "";
-                ViewData["CapacitySortParm"] = String.IsNullOrEmpty(sortOrder) ? "capacity" : "";
-                ViewData["TypeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "type" : "";
-                ViewData["SpeedSortParm"] = String.IsNullOrEmpty(sortOrder) ? "speed" : "";
+                ViewData["PlatformSortParm"] = String.IsNullOrEmpty(sortOrder) ? "platformCount" : "";
+                ViewData["OperationalSortParm"] = String.IsNullOrEmpty(sortOrder) ? "operational" : "";
                 ViewData["IdSortParm"] = String.IsNullOrEmpty(sortOrder) ? "id" : "";
                 ViewData["CurrentFilter"] = searchString;
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    trainLits = trainLits.Where(t => t.Name.Contains(searchString)).ToList();
+                    stationList = stationList.Where(t => t.Name.Contains(searchString)).ToList();
                 }
 
                 switch (sortOrder)
                 {
                     case "name":
-                        trainLits = trainLits.OrderBy(t => t.Name).ToList();
+                        stationList = stationList.OrderBy(t => t.Name).ToList();
                         break;
-                    case "capacity":
-                        trainLits = trainLits.OrderBy(t => t.Capacity).ToList();
+                    case "platformCount":
+                        stationList = stationList.OrderBy(t => t.PlatformCount).ToList();
                         break;
-                    case "date":
-                        trainLits = trainLits.OrderBy(t => t.ManufactureDate).ToList();
-                        break;
-                    case "type":
-                        trainLits = trainLits.OrderBy(t => t.Type).ToList();
-                        break;
-                    case "speed":
-                        trainLits = trainLits.OrderBy(t => t.MaxSpeed).ToList();
+                    case "operational":
+                        stationList = stationList.OrderBy(t => t.IsOperational).ToList();
                         break;
                     case "id":
-                        trainLits = trainLits.OrderBy(t => t.Id).ToList();
+                        stationList = stationList.OrderBy(t => t.Id).ToList();
                         break;
                     default:
-                        trainLits = trainLits.OrderBy(t => t.Id).ToList();
+                        stationList = stationList.OrderBy(t => t.Id).ToList();
                         break;
                 }
-                return View(trainLits);
+                return View(stationList);
             }
         }
 
         // https://localhost:7049/api/gettrain?id=2
-        [HttpGet("Train/Get")]
+        [HttpGet("Station/Get")]
         public IActionResult Get(int id)
         {
             using (var http = new HttpClient())
             {
-                var response = http.GetAsync(baseAddress + "/Trains/GetTrain/" + id + _apiKey).Result;
+                var response = http.GetAsync(baseAddress + "/Stations/GetStation/" + id + _apiKey).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var body = response.Content.ReadAsStringAsync().Result;
-                    return View(JsonConvert.DeserializeObject<TrainViewModel>(body));
+                    return View(JsonConvert.DeserializeObject<StationViewModel>(body));
                 }
                 return View();
             }
@@ -84,22 +76,21 @@ namespace WebClient.Controllers
         {
             return View();
         }
-
         [HttpPost]
-        public IActionResult Create(TrainViewModel train)
+        public IActionResult Create(StationViewModel station)
         {
             try
             {
-                string data = JsonConvert.SerializeObject(train);
+                string data = JsonConvert.SerializeObject(station);
                 StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage response = http.PostAsync(baseAddress + "/Trains/PostTrain" + _apiKey, content).Result;
+                    HttpResponseMessage response = http.PostAsync(baseAddress + "/Stations/PostStation" + _apiKey, content).Result;
 
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["successMessage"] = "Train Added.";
+                        TempData["successMessage"] = "Station Added.";
                         return RedirectToAction("Index");
                     }
                 }
@@ -118,15 +109,15 @@ namespace WebClient.Controllers
             {
                 using (var http = new HttpClient())
                 {
-                    TrainViewModel train = new TrainViewModel();
-                    HttpResponseMessage response = http.GetAsync(baseAddress + "/Trains/GetTrain/" + id + _apiKey).Result;
+                    StationViewModel station = new StationViewModel();
+                    HttpResponseMessage response = http.GetAsync(baseAddress + "/Stations/GetStation/" + id + _apiKey).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
                         string data = response.Content.ReadAsStringAsync().Result;
-                        train = JsonConvert.DeserializeObject<TrainViewModel>(data);
+                        station = JsonConvert.DeserializeObject<StationViewModel>(data);
                     }
-                    return View(train);
+                    return View(station);
                 }
             }
             catch (Exception ex)
@@ -136,19 +127,19 @@ namespace WebClient.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Edit(TrainViewModel train)
+        public IActionResult Edit(StationViewModel station)
         {
             try
             {
                 using (var http = new HttpClient())
                 {
-                    string data = JsonConvert.SerializeObject(train);
+                    string data = JsonConvert.SerializeObject(station);
                     StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = http.PutAsync(baseAddress + "/Trains/PutTrain/" + train.Id + _apiKey, content).Result;
+                    HttpResponseMessage response = http.PutAsync(baseAddress + "/Stations/PutStation/" + station.Id + _apiKey, content).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["successMessage"] = "Train updated successfully.";
+                        TempData["successMessage"] = "Station updated successfully.";
                         return RedirectToAction("Index");
                     }
                 }
@@ -165,16 +156,16 @@ namespace WebClient.Controllers
         {
             try
             {
-                TrainViewModel train = new TrainViewModel();
+                StationViewModel station = new StationViewModel();
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage response = http.GetAsync(baseAddress + "/Trains/GetTrain/" + id + _apiKey).Result;
+                    HttpResponseMessage response = http.GetAsync(baseAddress + "/Stations/GetStation/" + id + _apiKey).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         string data = response.Content.ReadAsStringAsync().Result;
-                        train = JsonConvert.DeserializeObject<TrainViewModel>(data);
+                        station = JsonConvert.DeserializeObject<StationViewModel>(data);
                     }
-                    return View(train);
+                    return View(station);
                 }
             }
             catch (Exception ex)
@@ -190,10 +181,10 @@ namespace WebClient.Controllers
             {
                 using (var http = new HttpClient())
                 {
-                    HttpResponseMessage response = http.DeleteAsync(baseAddress + "/Trains/DeleteTrain/" + id + _apiKey).Result;
+                    HttpResponseMessage response = http.DeleteAsync(baseAddress + "/Stations/DeleteStation/" + id + _apiKey).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        TempData["successMessage"] = "Train deleted successfully.";
+                        TempData["successMessage"] = "Station deleted successfully.";
                         return RedirectToAction("Index");
                     }
 
