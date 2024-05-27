@@ -9,17 +9,26 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="Index" method="get">
+    <div class="form-action no-color">
+        <p>
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]">@Html.DisplayNameFor(model => model.Id)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TrainId)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TrainSortParm"]">@Html.DisplayNameFor(model => model.TrainId)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StationId)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["StationSortParm"]">@Html.DisplayNameFor(model => model.StationId)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ArrivalTime)

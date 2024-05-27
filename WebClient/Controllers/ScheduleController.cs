@@ -58,7 +58,7 @@ namespace WebClient.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var body = response.Content.ReadAsStringAsync().Result;
-                    return View(JsonConvert.DeserializeObject<ScheduleController>(body));
+                    return View(JsonConvert.DeserializeObject<ScheduleViewModel>(body));
                 }
                 return View();
             }

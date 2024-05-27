@@ -12,10 +12,8 @@ namespace ApplicationServices.DTOs
     {
         [Required]
         public int TrainId { get; set; }
-        public virtual Train Train { get; set; }
         [Required]
         public int StationId { get; set; }
-        public virtual Station Station { get; set; }
         public DateTime ArrivalTime { get; set; }
         [Required]
         public DateTime DepartureTime { get; set; }

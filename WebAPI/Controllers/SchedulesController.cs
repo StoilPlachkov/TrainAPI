@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         // PUT: api/Trains/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSchedule(int id, Schedule schedule)
+        public async Task<IActionResult> PutSchedule(int id, ScheduleDTO schedule)
         {
             if (id != schedule.Id)
             {
@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
         // POST: api/Trains
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Station>> PostSchedule(Schedule schedule)
+        public async Task<ActionResult<ScheduleDTO>> PostSchedule(ScheduleDTO schedule)
         {
             await service.PostSchedule(new()
             {
